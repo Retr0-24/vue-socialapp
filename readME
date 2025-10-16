@@ -44,10 +44,9 @@
 // django-admin startproject backend
 
 //// Add in the settings.py the installed Apps
-// 'rest_framework'
-// 'rest_framework-simplejwt'
-// 'pillow'
-// 'corsheaders'
+// 'rest_framework',
+// 'rest_framework-simplejwt',
+// 'corsheaders',
 
 //// Application definition SimpleJWT
 // SIMPLE_JWT = {
