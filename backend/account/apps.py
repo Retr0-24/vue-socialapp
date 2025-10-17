@@ -1,3 +1,6 @@
+# Import Depnendencies
+
+# Import Django Components
 from django.apps import AppConfig
 
 

@@ -1,3 +1,4 @@
+# Import Depnendencies
 from datetime import timedelta
 from pathlib import Path
 
@@ -19,6 +20,9 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+# Tell Django this is the default User Model 
+AUTH_USER_MODEL = 'account.User'
+
 SIMPLE_JWT = {
     'ACCES_TOKEN_LIFETIME': timedelta(days=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=180),
@@ -35,11 +39,11 @@ REST_FRAMEWORK = {
     }
 
 CORS_ALLOWED_ORIGINS = [
-    "http:127.0.0.1:5173",
+    "http://127.0.0.1:5173",
     ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "http:127.0.0.1:5173",
+    "http://127.0.0.1:5173",
     ]
 
 INSTALLED_APPS = [
@@ -49,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'account',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',

@@ -77,3 +77,17 @@
 
 //// Start Django Project
 // python manage.py startapp account
+
+//// Configure models.py
+// Create User Manager 
+// Create User Model
+
+/// Configure settings.py
+// Tell django default user model with AUTH_USER_MODEL
+// Add 'account', to INSTALLED APPS
+
+//// Make migrations
+// python3 manage.py makemigrations
+
+//// Run Migrations
+// python3 manage.py migrate

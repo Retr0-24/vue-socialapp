@@ -1,4 +1,7 @@
+// Import Dependencies
 import { defineStore } from "pinia";
+
+// Import Components
 
 export const useToastStore = defineStore({
   id: "toast",
