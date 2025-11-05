@@ -1,11 +1,15 @@
-<script setup></script>
+<script setup>
+// This component does not have any script logic.
+</script>
 
 <template>
+  <!-- This view represents the messages page with a two-column layout. -->
   <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
-    <!-- Proposals Messages leftside-->
+    <!-- Left column: List of message proposals (conversations) -->
     <div class="main-left col-span-1">
-      <div class="p-4 bg-white border border-gray-200 rounder-lg">
+      <div class="p-4 bg-white border border-gray-200 rounded-lg">
         <div class="space-y-4">
+          <!-- Each of these is a static placeholder for a conversation. -->
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-2">
               <img
@@ -16,55 +20,24 @@
             </div>
             <span class="text-xs text-gray-500">13 minutes ago</span>
           </div>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-              <img
-                src="https://i.pravatar.cc/300?img=70"
-                class="w-[40px] rounded-full"
-              />
-              <p class="text-xs"><strong>Placeholder Name</strong></p>
-            </div>
-            <span class="text-xs text-gray-500">13 minutes ago</span>
-          </div>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-              <img
-                src="https://i.pravatar.cc/300?img=70"
-                class="w-[40px] rounded-full"
-              />
-              <p class="text-xs"><strong>Placeholder Name</strong></p>
-            </div>
-            <span class="text-xs text-gray-500">13 minutes ago</span>
-          </div>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-              <img
-                src="https://i.pravatar.cc/300?img=70"
-                class="w-[40px] rounded-full"
-              />
-              <p class="text-xs"><strong>Placeholder Name</strong></p>
-            </div>
-            <span class="text-xs text-gray-500">13 minutes ago</span>
-          </div>
+          <!-- More placeholder conversations... -->
         </div>
       </div>
     </div>
 
-    <!-- Main Message Fields Center and rightside-->
+    <!-- Right column: Main message area -->
     <div class="main-center col-span-3 space-y-4">
-      <!-- Message View Field -->
+      <!-- Message history -->
       <div class="bg-white border border-gray-200 rounded-lg">
         <div class="flex flex-col flex-grow p-4">
-          <!-- Message Field Center Blue Text Boxes -->
+          <!-- Sent message (right side) -->
           <div class="flex w-full mt-2 space-x-3 max-w-md ml-auto justify-end">
             <div>
               <div
                 class="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg"
               >
                 <p class="text-sm">
-                  Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem
-                  ipsum dolor sit amet.Lorem ipsum dolor sit amet.Lorem ipsum
-                  dolor sit amet.
+                  This is a placeholder for a sent message.
                 </p>
               </div>
               <span class="text-xs text-gray-500 leading-none">2 min ago</span>
@@ -77,26 +50,7 @@
             </div>
           </div>
 
-          <div class="flex w-full mt-2 space-x-3 max-w-md ml-auto justify-end">
-            <div>
-              <div
-                class="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg"
-              >
-                <p class="text-sm">
-                  Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
-                </p>
-              </div>
-              <span class="text-xs text-gray-500 leading-none">1 min ago</span>
-            </div>
-            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300">
-              <img
-                src="https://i.pravatar.cc/300?img=70"
-                class="w-[40px] rounded-full"
-              />
-            </div>
-          </div>
-
-          <!-- Message Field Center White Text Boxes -->
+          <!-- Received message (left side) -->
           <div class="flex w-full mt-2 space-x-3 max-w-md">
             <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300">
               <img
@@ -107,36 +61,16 @@
             <div>
               <div class="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">
                 <p class="text-sm">
-                  Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.Lorem
-                  ipsum dolor sit amet.
+                  This is a placeholder for a received message.
                 </p>
               </div>
               <span class="text-xs text-gray-500 leading-none">1 min ago</span>
-            </div>
-          </div>
-
-          <div class="flex w-full mt-2 space-x-3 max-w-md">
-            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300">
-              <img
-                src="https://i.pravatar.cc/300?img=70"
-                class="w-[40px] rounded-full"
-              />
-            </div>
-            <div>
-              <div class="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">
-                <p class="text-sm">
-                  Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.
-                </p>
-              </div>
-              <span class="text-xs text-gray-500 leading-none"
-                >34 seconds ago</span
-              >
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Message Input Field -->
+      <!-- Message input form -->
       <div class="bg-white border border-gray-200 rounded-lg">
         <div class="p-4">
           <textarea
@@ -156,4 +90,6 @@
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+/* Scoped styles for this component can be added here. */
+</style>

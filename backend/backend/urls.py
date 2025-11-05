@@ -9,7 +9,10 @@ from django.urls import path, include
 
 # Configure Project URL Patterns and include JWT URLs from account/urls.py
 urlpatterns = [
+    path('me/', api.me, name='me'),
+    path('api/me/', api.me, name='api-me'),
     path('signup/', api.signup, name='signup'),
+    path('api/signup/', api.signup, name='api-signup'),
     path('api/', include('account.urls')),
     path('admin/', admin.site.urls),
 ]

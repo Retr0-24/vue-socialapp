@@ -5,6 +5,13 @@ from .forms import signUpForm
 # Import Django Components
 from django.http import JsonResponse
 
+@api_view(['GET'])
+def me(request):
+    return JsonResponse({
+        'id': request.user.id,
+        'email': request.user.email,
+        'name': request.user.name
+    })
 
 @api_view(['POST'])
 @authentication_classes([])

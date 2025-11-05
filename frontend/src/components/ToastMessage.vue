@@ -1,24 +1,27 @@
 <script setup>
+// Import the Pinia store for toast notifications.
 import { useToastStore } from "@/stores/toast";
 
-// Initialize Variable that is stored with isVisible, Classes and Message
+// Initialize the toast store to access its state.
 const store = useToastStore();
-
-return {
-  store,
-};
 </script>
 
 <template>
-  <!-- Create if statement to store only in variable if store is Visible and Design Toast Message -->
+  <!--
+    This div represents the toast notification.
+    It is only rendered if `store.isVisible` is true.
+    The `v-if` directive handles the conditional rendering.
+  -->
   <div
     v-if="store.isVisible"
     class="transition ease-in-out delay-500 duration-500 px-6 py-6 fixed top-full right-8 rounded-xl shadow-xl"
-    :class="store.classes"
+    :class="store.classes" <!-- Dynamically apply CSS classes from the store (e.g., for color). -->
   >
-    <!-- Show stored message Success or Error -->
+    <!-- Display the message from the toast store. -->
     {{ store.message }}
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+/* Scoped styles for this component can be added here. */
+</style>

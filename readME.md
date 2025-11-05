@@ -92,3 +92,9 @@ python3 manage.py migrate
 
 Run Server
 python3 manage.py runserver
+
+# Notes
+
+Username: Retr0
+Email: crankywright1@justzeus.com
+Password: testpassword

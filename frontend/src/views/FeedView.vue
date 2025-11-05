@@ -1,27 +1,33 @@
 <script setup>
+// Import placeholder image and components.
 import placeholderImage from "@/assets/img/demon-slayer-placeholder.jpg";
 import PeopleYouKnow from "@/components/PeopleYouKnow.vue";
 import Trends from "@/components/Trends.vue";
 </script>
 
 <template>
-  <!-- Profile Card leftside -->
+  <!-- This view represents the main feed page with a three-column layout. -->
   <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
+    <!-- Left column: User profile information -->
     <div class="main-left col-span-1">
       <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
+        <!-- User avatar -->
         <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full" />
 
+        <!-- User name -->
         <p><strong>Placeholder Name</strong></p>
 
+        <!-- User stats: friends and posts count -->
         <div class="mt-6 flex space-x-8 justify-around">
           <p class="text-xs text-gray-500">182 friends</p>
           <p class="text-xs text-gray-500">120 posts</p>
         </div>
       </div>
-
-      <!-- Main Post Field Center -->
     </div>
+
+    <!-- Center column: Post creation and feed -->
     <div class="main-center col-span-2 space-y-4">
+      <!-- Post creation form -->
       <div class="bg-white border border-gray-200 rounded-lg">
         <div class="p-4">
           <textarea
@@ -30,6 +36,7 @@ import Trends from "@/components/Trends.vue";
           ></textarea>
         </div>
         <div class="p-4 border-t border-gray-100 flex justify-between">
+          <!-- Buttons for attaching an image and posting -->
           <a
             href="#"
             class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg"
@@ -43,7 +50,7 @@ import Trends from "@/components/Trends.vue";
         </div>
       </div>
 
-      <!-- Main First Post Feed Center -->
+      <!-- First post in the feed (static placeholder) -->
       <div class="p-4 bg-white border border-gray-200 rounded-lg">
         <div class="mb-6 flex items-center justify-between">
           <div class="flex items-center space-x-6">
@@ -56,7 +63,10 @@ import Trends from "@/components/Trends.vue";
           <p class="text-gray-600">18 minutes ago</p>
         </div>
 
+        <!-- Post content with an image -->
         <img :src="placeholderImage" class="w-full rounded-lg" />
+
+        <!-- Post actions: likes and comments -->
         <div class="my-6 flex justify-between">
           <div class="flex space-x-6">
             <div class="flex items-center space-x-2">
@@ -91,10 +101,10 @@ import Trends from "@/components/Trends.vue";
                   d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z"
                 />
               </svg>
-
               <span class="text-gray-500 text-xs">0 comments</span>
             </div>
           </div>
+          <!-- More options button -->
           <div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -114,7 +124,7 @@ import Trends from "@/components/Trends.vue";
         </div>
       </div>
 
-      <!-- Main Second Post Feed Center -->
+      <!-- Second post in the feed (static placeholder) -->
       <div class="p-4 bg-white border border-gray-200 rounded-lg">
         <div class="mb-6 flex items-center justify-between">
           <div class="flex items-center space-x-6">
@@ -127,10 +137,12 @@ import Trends from "@/components/Trends.vue";
           <p class="text-gray-600">27 minutes ago</p>
         </div>
 
+        <!-- Post content with text -->
         <p>
-          Lorem ipsum dolor sit mate.Lorem ipsum dolor sit mate.Lorem ipsum
-          dolor sit mate.Lorem ipsum dolor sit mate.Lorem ipsum dolor sit mate.
+          This is a placeholder post. The content is static and will be replaced with dynamic data.
         </p>
+
+        <!-- Post actions: likes and comments -->
         <div class="my-6 flex justify-between">
           <div class="flex space-x-6">
             <div class="flex items-center space-x-2">
@@ -165,10 +177,10 @@ import Trends from "@/components/Trends.vue";
                   d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z"
                 />
               </svg>
-
               <span class="text-gray-500 text-xs">0 comments</span>
             </div>
           </div>
+          <!-- More options button -->
           <div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -189,14 +201,14 @@ import Trends from "@/components/Trends.vue";
       </div>
     </div>
 
-    <!-- People you may know Feed rightside -->
+    <!-- Right column: "People you may know" and "Trends" sections -->
     <div class="main-right col-span-1 space-y-4">
       <PeopleYouKnow />
-
-      <!-- Trends Feed rightside -->
       <Trends />
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+/* Scoped styles for this component can be added here. */
+</style>

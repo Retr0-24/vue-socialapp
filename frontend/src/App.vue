@@ -1,20 +1,52 @@
 <script setup>
+// This script setup block handles the component's logic.
+
 // Import Dependencies
-import { RouterView } from "vue-router";
+import { onBeforeMount } from "vue"; // Vue's lifecycle hook that runs before the component is mounted.
+import { RouterView } from "vue-router"; // Used to display the component for the current route.
+import axios from "axios"; // HTTP client for making API requests.
+import { storeToRefs } from "pinia"; // Utility to create refs from store properties.
 
 // Import Components
+import ToastMessage from "./components/ToastMessage.vue"; // Component to display toast notifications.
+import { useUserStore } from "./stores/user"; // Pinia store for user state management.
+
+// Initialize the user store.
+const userStore = useUserStore();
+
+// Destructure reactive properties from the user store.
+const { isAuthenticated } = storeToRefs(userStore);
+
+// `onBeforeMount` lifecycle hook to initialize the user store and set up Axios headers.
+onBeforeMount(() => {
+  // Initialize the user store, which likely involves checking for existing user data in local storage.
+  userStore.initStore();
+
+  // If an access token is present in the user store, set it as the default Authorization header for all Axios requests.
+  if (userStore.access) {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${userStore.access}`;
+  } else {
+    // If no access token is found, remove the Authorization header from Axios defaults.
+    delete axios.defaults.headers.common["Authorization"];
+  }
+});
 </script>
 
 <template>
-  <!-- Navbar -->
+  <!-- Main application navigation bar -->
   <nav class="py-10 px-8 border-b border-gray-200">
     <div class="max-w-7xl mx-auto">
       <div class="flex items-center justify-between">
+        <!-- Logo and application title -->
         <div class="menu-left">
           <a href="#" class="text-xl">Social App</a>
         </div>
 
-        <div class="menu-center flex space-x-12">
+        <!-- Center menu with navigation links, shown only if the user is authenticated -->
+        <div class="menu-center flex space-x-12" v-if="isAuthenticated">
+          <!-- Home link with an SVG icon -->
           <a href="#" class="text-purple-700">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -32,6 +64,7 @@ import { RouterView } from "vue-router";
             </svg>
           </a>
 
+          <!-- Messages link with an SVG icon -->
           <a>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -49,6 +82,7 @@ import { RouterView } from "vue-router";
             </svg>
           </a>
 
+          <!-- Notifications link with an SVG icon -->
           <a>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -66,6 +100,7 @@ import { RouterView } from "vue-router";
             </svg>
           </a>
 
+          <!-- Search link with an SVG icon -->
           <a href="#">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -83,18 +118,43 @@ import { RouterView } from "vue-router";
             </svg>
           </a>
         </div>
+
+        <!-- Right menu with user-specific actions -->
         <div class="menu-right">
-          <a href="#">
-            <img src="https://i.pravatar.cc/40?img=70" class="rounded-full" />
-          </a>
+          <!-- Display user avatar if authenticated -->
+          <template v-if="isAuthenticated">
+            <a href="#">
+              <img src="https://i.pravatar.cc/40?img=70" class="rounded-full" />
+            </a>
+          </template>
+          <!-- Display Login and Signup links if not authenticated -->
+          <template v-else>
+            <RouterLink
+              to="/login"
+              class="mr-4 py-4 px-6 bg-gray-600 text-white rounded-lg"
+              >Login
+            </RouterLink>
+            <RouterLink
+              to="/signup"
+              class="py-4 px-6 bg-purple-600 text-white rounded-lg"
+              >Signup
+            </RouterLink>
+          </template>
         </div>
       </div>
     </div>
   </nav>
-  <!-- Placeholder Comment -->
+
+  <!-- Main content area where routed components will be displayed -->
   <main class="px-8 py-6 bg-gray-100">
     <RouterView />
   </main>
+
+  <!-- Toast message component to show notifications -->
+  <ToastMessage />
 </template>
 
-<style scoped></style>
+<style scoped>
+/* Scoped styles for this component. */
+/* These styles will only apply to the elements in this component and not affect other components. */
+</style>

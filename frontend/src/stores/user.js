@@ -1,21 +1,28 @@
 // Import Dependencies
-import { defineStore } from "pinia";
-import axios from "axios";
+import { defineStore } from "pinia"; // Pinia's function to create a new store.
+import axios from "axios"; // HTTP client for making API requests.
 
-// Import Components
-
+/**
+ * `useUserStore` is a Pinia store for managing user-related state,
+ * including authentication status, user information, and JWT tokens.
+ */
 export const useUserStore = defineStore("user", {
+  // The state is a function that returns an object of reactive properties.
   state: () => ({
-    isAuthenticated: false,
-    id: null,
-    name: null,
-    email: null,
-    access: null,
-    refresh: null,
+    isAuthenticated: false, // Tracks if the user is authenticated.
+    id: null, // User's unique identifier.
+    name: null, // User's name.
+    email: null, // User's email address.
+    access: null, // JWT access token.
+    refresh: null, // JWT refresh token.
   }),
 
-  // Initialize Store and load Item from Local Storage
+  // Actions are methods that can be called to modify the state.
   actions: {
+    /**
+     * Initializes the user store from data saved in local storage.
+     * This is used to persist the user's session across page reloads.
+     */
     initStore() {
       const access = localStorage.getItem("user.access");
       if (access) {
@@ -26,8 +33,12 @@ export const useUserStore = defineStore("user", {
         this.email = localStorage.getItem("user.email");
         this.isAuthenticated = true;
 
-        axios.defaults.headers.common["Authorization"] = `Bearer ${this.access}`;
+        // Set the Authorization header for all subsequent Axios requests.
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${this.access}`;
 
+        // Attempt to refresh the access token to ensure it's not expired.
         this.refreshToken();
 
         console.log("Initialized User", {
@@ -37,7 +48,11 @@ export const useUserStore = defineStore("user", {
       }
     },
 
-    // Set JWT Access Token that you are Authenticated and save it in Localstorage
+    /**
+     * Sets the JWT access and refresh tokens, marks the user as authenticated,
+     * and saves the tokens to local storage.
+     * @param {object} data - An object containing the access and refresh tokens.
+     */
     setToken(data) {
       console.log("setToken", data);
 
@@ -45,16 +60,22 @@ export const useUserStore = defineStore("user", {
       this.refresh = data.refresh;
       this.isAuthenticated = true;
 
+      // Set the Authorization header for future Axios requests.
       axios.defaults.headers.common["Authorization"] = `Bearer ${data.access}`;
 
+      // Store tokens in local storage for persistence.
       localStorage.setItem("user.access", data.access);
       localStorage.setItem("user.refresh", data.refresh);
     },
 
-    // Remove JWT Tokens and User Data from Store and Localstorage
+    /**
+     * Removes all user-related data from the store and local storage,
+     * effectively logging the user out.
+     */
     removeToken() {
       console.log("removeToken");
 
+      // Clear all user state properties.
       this.refresh = null;
       this.access = null;
       this.isAuthenticated = false;
@@ -62,8 +83,10 @@ export const useUserStore = defineStore("user", {
       this.name = null;
       this.email = null;
 
+      // Remove the Authorization header from Axios.
       delete axios.defaults.headers.common["Authorization"];
 
+      // Remove user data from local storage.
       localStorage.removeItem("user.access");
       localStorage.removeItem("user.refresh");
       localStorage.removeItem("user.id");
@@ -71,7 +94,10 @@ export const useUserStore = defineStore("user", {
       localStorage.removeItem("user.email");
     },
 
-    // Get Token from backend for Login User and save in Localstorage
+    /**
+     * Sets the user's information in the store and saves it to local storage.
+     * @param {object} user - An object containing the user's ID, name, and email.
+     */
     setUserInfo(user) {
       console.log("setUserInfo", user);
 
@@ -79,6 +105,7 @@ export const useUserStore = defineStore("user", {
       this.name = user.name;
       this.email = user.email;
 
+      // Store user information in local storage.
       localStorage.setItem("user.id", this.id ?? "");
       localStorage.setItem("user.name", this.name ?? "");
       localStorage.setItem("user.email", this.email ?? "");
@@ -90,28 +117,33 @@ export const useUserStore = defineStore("user", {
       });
     },
 
-    // Refresh JWT Access Token
+    /**
+     * Refreshes the JWT access token using the refresh token.
+     * If the refresh fails, the user is logged out.
+     */
     refreshToken() {
       if (!this.refresh) {
-        return;
+        return; // Do nothing if there is no refresh token.
       }
 
       axios
-        .post("/api/account/refresh/", {
+        .post("/api/refresh/", {
           refresh: this.refresh,
         })
-
         .then((response) => {
+          // Update the access token with the new one.
           this.access = response.data.access;
 
+          // Save the new access token to local storage.
           localStorage.setItem("user.access", response.data.access);
 
+          // Update the Authorization header for Axios.
           axios.defaults.headers.common["Authorization"] =
             "Bearer " + response.data.access;
         })
         .catch((error) => {
           console.log(error);
-
+          // If refreshing the token fails, remove all tokens and log the user out.
           this.removeToken();
         });
     },
