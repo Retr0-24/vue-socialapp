@@ -1,5 +1,7 @@
 # Import Depnendencies
-from . import api
+from account.api import signup
+from account import api
+
 
 # Import Django Components
 from django.contrib import admin

@@ -3,9 +3,7 @@ import { defineStore } from "pinia";
 
 // Import Components
 
-export const useToastStore = defineStore({
-  id: "toast",
-
+export const useToastStore = defineStore("toast", {
   // Define what should be stored in useToastStore
   state: () => ({
     ms: 0,
