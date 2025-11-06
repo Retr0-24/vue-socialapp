@@ -39,6 +39,11 @@ const routes = [
     component: () => import("../views/SearchView.vue"),
   },
   {
+    path: "/profile/:id/friends",
+    name: "friends",
+    component: () => import("../views/FriendsView.vue"),
+  },
+  {
     // This is a catch-all route for any paths that don't match the defined routes.
     path: "/:pathMatch(.*)*",
     name: "not-found",

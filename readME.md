@@ -1,116 +1,113 @@
 # Frontend
 
 Create VueJS Project
-npm create vue@latest
+<br>npm create vue@latest
 
 Go into folder
-cd /foldername
+<br>cd /foldername
 
 Install VueJS
-npm install
+<br>npm install
 
 Install Tailwind
-npm install tailwindcss @tailwindcss/vite
+<br>npm install tailwindcss @tailwindcss/vite
 
 Install Dependencies
-npm install vue-router
-npm install pinia
-npm install axios
+<br>npm install vue-router
+<br>npm install pinia
+<br>npm install axios
 
 Compile and hot-reload for Production
-npm run dev
+<br>npm run dev
 
 Compile and minify for Production
-npm run build
+<br>npm run build
 
 # Backend
 
 Create local environment
-python3 -m venv env
+<br>python3 -m venv env
 
 Activate local enironment
-source env/bin/activate
+<br>source env/bin/activate
 
 Install Django
-pip3 install django
+<br>pip3 install django
 
 Install Dependencies
-pip3 install djangorestframework
-pip3 install djangorestframework-simplejwt
-pip3 install pillow
-pip3 install django-cors-headers
+<br>pip3 install djangorestframework
+<br>pip3 install djangorestframework-simplejwt
+<br>pip3 install pillow
+<br>pip3 install django-cors-headers
 
 Create Django Project
-django-admin startproject backend
+<br>django-admin startproject backend
 
 Add in the settings.py the installed Apps
-'rest_framework',
-'rest_framework-simplejwt',
-'corsheaders',
+<br>'rest_framework',
+<br>'rest_framework-simplejwt',
+<br>'corsheaders',
 
 Application definition SimpleJWT
-SIMPLE_JWT = {
-'ACCES_TOKEN_LIFETIME': timedelta(days=30),
-'REFRESH_TOKEN_LIFETIME': timedelta(days=180),
-'ROTATE_REFRESH_TOKEN': False,
-}
+<br>SIMPLE_JWT = {
+<br>'ACCES_TOKEN_LIFETIME': timedelta(days=30),
+<br>'REFRESH_TOKEN_LIFETIME': timedelta(days=180),
+<br>'ROTATE_REFRESH_TOKEN': False,
+<br>}
 
-REST_FRAMEWORK = {
-'DEFAULT_AUTHENTICATION_CLASSES': (
-'rest_framework_simplejwt.authentication.JWTAuthentication',
-),
-'DEFAULT_PERMISSION_CLASSES': (  
-'rest_framework.permissions.IsAuthenticated',
-),
-}
-CORS_ALLOWED_ORIGINS = [
-"http:127.0.0.1:5173",
-]
-CSRF_TRUSTED_ORIGINS = [
-"http:127.0.0.1:5173",
-]
+<br>REST_FRAMEWORK = {
+<br>'DEFAULT_AUTHENTICATION_CLASSES': (
+<br>'rest_framework_simplejwt.authentication.JWTAuthentication',
+<br>),
+<br>'DEFAULT_PERMISSION_CLASSES': (  
+<br>'rest_framework.permissions.IsAuthenticated',
+<br>),
+<br>}
+<br>CORS_ALLOWED_ORIGINS = [
+<br>"http:127.0.0.1:5173",
+<br>]
+<br>CSRF_TRUSTED_ORIGINS = [
+<br>"http:127.0.0.1:5173",
+<br>]
 
 Set Cors Headers in Middleware
-'cors_headers.middleware.CorsMiddleware', (BETWEEN DJANGO SESSION.MIDDLEWARE AND DJANGO COMMON.MIDDLEWARE)
+<br>'cors_headers.middleware.CorsMiddleware', (BETWEEN DJANGO SESSION.MIDDLEWARE AND DJANGO COMMON.MIDDLEWARE)
 
 Start Django Project
-python manage.py startapp account
+<br>python manage.py startapp account
 
 Configure models.py
-Create User Manager
-Create User Model
+<br>Create User Manager
+<br>Create User Model
 
 Configure settings.py
-Tell django default user model with AUTH_USER_MODEL
-Add 'account', to INSTALLED APPS
+<br>Tell django default user model with AUTH_USER_MODEL
+<br>Add 'account', to INSTALLED APPS
 
 Make migrations
-python3 manage.py makemigrations
+<br>python3 manage.py makemigrations
 
 Run Migrations
-python3 manage.py migrate
+<br>python3 manage.py migrate
 
 Run Server
-python3 manage.py runserver
+<br>python3 manage.py runserver
 
 # Notes
 
-Create Documentation
-Let AI comment the code
-
 Main User:
-Id: deeda893-1cf5-4065-b012-a08d552f061b
-Username: Retr0
-Email: crankywright1@justzeus.com
-Password: testpassword
+<br>Id: deeda893-1cf5-4065-b012-a08d552f061b
+<br>Username: Retr0
+<br>Email: crankywright1@justzeus.com
+<br>Password: testpassword
 
 Test User:
-Id: 71d84f01-537b-430d-9711-b71df5028321
-Username: testname
-Email: test@gmail.com
-Password: testpassword
+<br>Id: 71d84f01-537b-430d-9711-b71df5028321
+<br>Username: testname
+<br>Email: test@gmail.com
+<br>Password: testpassword
 
 Admin User (NOT CONFIGURED):
-Username:
-Email:
-Password:
+<br>Username:
+<br>Email:
+<br>Password:

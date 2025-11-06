@@ -51,6 +51,17 @@ const submitForm = async () => {
     console.log("error", error);
   }
 };
+
+const sendFriendshipRequest = async () => {
+  try {
+    const { data } = await axios.post(
+      `/api/friends/send-request/${route.params.id}/`
+    );
+    console.log("data", data);
+  } catch (error) {
+    console.log("error", error);
+  }
+};
 </script>
 
 <template>
@@ -68,9 +79,25 @@ const submitForm = async () => {
         </p>
 
         <!-- User stats: friends and posts count -->
-        <div class="mt-6 flex space-x-8 justify-around">
-          <p class="text-xs text-gray-500">182 friends</p>
+        <div
+          v-if="user"
+          class="mt-6 flex space-x-8 justify-around"
+        >
+          <RouterLink
+            :to="{ name: 'friends', params: { id: user.id } }"
+            class="text-xs text-gray-500"
+            >182 friends</RouterLink
+          >
           <p class="text-xs text-gray-500">120 posts</p>
+        </div>
+
+        <div class="mt-6">
+          <button
+            class="inline-block py-1 px-3 bg-purple-600 text-xs text-white rounded-lg"
+            @click="sendFriendshipRequest"
+          >
+            Send Friend Request
+          </button>
         </div>
       </div>
     </div>

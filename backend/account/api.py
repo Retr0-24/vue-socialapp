@@ -1,9 +1,15 @@
 # Import Depnendencies
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from .forms import signUpForm
-
-# Import Django Components
 from django.http import JsonResponse
+
+# Import Components
+from .forms import signUpForm
+from .models import FriendshipRequest
+from .models import User
+from .serializers import UserSerializer, FriendshipRequestSerializer
+
+
+# Create your views here.
 
 @api_view(['GET'])
 def me(request):
@@ -35,3 +41,27 @@ def signup(request):
         message = 'Error'
 
     return JsonResponse({'message': message})
+
+@api_view(['GET'])
+def friends(request, pk):
+    user = User.objects.get(pk=pk)
+    requests = []
+
+    if user == request.user:
+        requests = FriendshipRequest.objects.filter(created_for=request.user)
+    
+    friends = user.friends.all()
+
+    return JsonResponse({
+        'user': UserSerializer(user),
+        'friends': UserSerializer(friends, many=True),
+        'requests': FriendshipRequestSerializer(requests, many=True)
+    }, safe=False)
+
+@api_view(['POST'])
+def send_friendship_request(request, pk):
+    user = User.objects.get(pk=pk)
+
+    friendship_request = FriendshipRequest(created_for=user, created_by=request.user)
+
+    return JsonResponse({'message': 'Request Send'})
