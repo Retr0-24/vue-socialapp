@@ -95,6 +95,22 @@ python3 manage.py runserver
 
 # Notes
 
+Create Documentation
+Let AI comment the code
+
+Main User:
+Id: deeda893-1cf5-4065-b012-a08d552f061b
 Username: Retr0
 Email: crankywright1@justzeus.com
 Password: testpassword
+
+Test User:
+Id: 71d84f01-537b-430d-9711-b71df5028321
+Username: testname
+Email: test@gmail.com
+Password: testpassword
+
+Admin User (NOT CONFIGURED):
+Username:
+Email:
+Password:

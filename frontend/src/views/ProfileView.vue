@@ -1,0 +1,130 @@
+<script setup>
+// Import Dependencies
+import axios from "axios";
+import { onMounted, ref, watch } from "vue";
+import { useRoute } from "vue-router";
+
+// Import components.
+import PeopleYouKnow from "@/components/PeopleYouKnow.vue";
+import Trends from "@/components/Trends.vue";
+import { useUserStore } from "@/stores/user";
+import FeedItem from "@/components/FeedItem.vue";
+
+const posts = ref([]);
+const user = ref(null);
+const body = ref("");
+const userStore = useUserStore();
+const route = useRoute();
+
+const getFeed = async () => {
+  try {
+    const { data } = await axios.get(`/api/posts/profile/${route.params.id}`);
+    console.log("data", data);
+
+    posts.value = data.posts || [];
+    user.value = data.user || null;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+onMounted(getFeed);
+
+watch(
+  () => route.params.id,
+  () => getFeed(),
+  { immediate: true }
+);
+
+const submitForm = async () => {
+  console.log("submitForm", body.value);
+
+  try {
+    const { data } = await axios.post("/api/posts/create/", {
+      body: body.value,
+    });
+    console.log("data", data);
+
+    posts.value.unshift(data);
+    body.value = "";
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+</script>
+
+<template>
+  <!-- This view represents the main feed page with a three-column layout. -->
+  <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
+    <!-- Left column: User profile information -->
+    <div class="main-left col-span-1">
+      <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
+        <!-- User avatar -->
+        <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full" />
+
+        <!-- User name -->
+        <p>
+          <strong>{{ user?.name ?? "" }}</strong>
+        </p>
+
+        <!-- User stats: friends and posts count -->
+        <div class="mt-6 flex space-x-8 justify-around">
+          <p class="text-xs text-gray-500">182 friends</p>
+          <p class="text-xs text-gray-500">120 posts</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center column: Post creation and feed -->
+    <div class="main-center col-span-2 space-y-4">
+      <!-- Post creation form -->
+      <div
+        class="bg-white border border-gray-200 rounded-lg"
+        v-if="userStore.id && user && userStore.id === user.id"
+      >
+        <form v-on:submit.prevent="submitForm" method="post">
+          <div class="p-4">
+            <textarea
+              v-model="body"
+              class="p-4 w-full bg-gray-100 rounded-lg"
+              placeholder="What do you want to post?"
+            ></textarea>
+          </div>
+          <div class="p-4 border-t border-gray-100 flex justify-between">
+            <!-- Buttons for attaching an image and posting -->
+            <a
+              href="#"
+              class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg"
+              >Attach Image</a
+            >
+            <button
+              href="#"
+              class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
+            >
+              Post
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Second post in the feed (static placeholder) -->
+      <div
+        class="p-4 bg-white border border-gray-200 rounded-lg"
+        v-for="post in posts"
+        v-bind:key="post.id"
+      >
+        <FeedItem v-bind:post="post" />
+      </div>
+    </div>
+
+    <!-- Right column: "People you may know" and "Trends" sections -->
+    <div class="main-right col-span-1 space-y-4">
+      <PeopleYouKnow />
+      <Trends />
+    </div>
+  </div>
+</template>
+
+<style scoped>
+/* Scoped styles for this component can be added here. */
+</style>

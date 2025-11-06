@@ -3,13 +3,14 @@
 
 // Import Dependencies
 import { onBeforeMount } from "vue"; // Vue's lifecycle hook that runs before the component is mounted.
-import { RouterView } from "vue-router"; // Used to display the component for the current route.
+import { RouterView, RouterLink } from "vue-router"; // Used to display the component for the current route.
 import axios from "axios"; // HTTP client for making API requests.
 import { storeToRefs } from "pinia"; // Utility to create refs from store properties.
 
 // Import Components
 import ToastMessage from "./components/ToastMessage.vue"; // Component to display toast notifications.
 import { useUserStore } from "./stores/user"; // Pinia store for user state management.
+import ProfileView from "./views/ProfileView.vue";
 
 // Initialize the user store.
 const userStore = useUserStore();
@@ -41,13 +42,13 @@ onBeforeMount(() => {
       <div class="flex items-center justify-between">
         <!-- Logo and application title -->
         <div class="menu-left">
-          <a href="#" class="text-xl">Social App</a>
+          <RouterLink to="/" class="text-xl">Social App</RouterLink>
         </div>
 
         <!-- Center menu with navigation links, shown only if the user is authenticated -->
         <div class="menu-center flex space-x-12" v-if="isAuthenticated">
           <!-- Home link with an SVG icon -->
-          <a href="#" class="text-purple-700">
+          <RouterLink to="/" class="text-purple-700">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -62,7 +63,7 @@ onBeforeMount(() => {
                 d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
               />
             </svg>
-          </a>
+          </RouterLink>
 
           <!-- Messages link with an SVG icon -->
           <a>
@@ -101,7 +102,7 @@ onBeforeMount(() => {
           </a>
 
           <!-- Search link with an SVG icon -->
-          <a href="#">
+          <RouterLink to="/search">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -116,16 +117,16 @@ onBeforeMount(() => {
                 d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
               />
             </svg>
-          </a>
+          </RouterLink>
         </div>
 
         <!-- Right menu with user-specific actions -->
         <div class="menu-right">
           <!-- Display user avatar if authenticated -->
           <template v-if="isAuthenticated">
-            <a href="#">
+            <RouterLink :to="{ name: 'profile', params: { id: userStore.id } }">
               <img src="https://i.pravatar.cc/40?img=70" class="rounded-full" />
-            </a>
+            </RouterLink>
           </template>
           <!-- Display Login and Signup links if not authenticated -->
           <template v-else>
