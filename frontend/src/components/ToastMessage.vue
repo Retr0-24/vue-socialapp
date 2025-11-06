@@ -15,7 +15,7 @@ const store = useToastStore();
   <div
     v-if="store.isVisible"
     class="transition ease-in-out delay-500 duration-500 px-6 py-6 fixed top-full right-8 rounded-xl shadow-xl"
-    :class="store.classes" <!-- Dynamically apply CSS classes from the store (e.g., for color). -->
+    :class="store.classes"
   >
     <!-- Display the message from the toast store. -->
     {{ store.message }}
