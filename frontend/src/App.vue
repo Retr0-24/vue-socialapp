@@ -67,7 +67,7 @@ onBeforeMount(() => {
           </RouterLink>
 
           <!-- Messages link with an SVG icon -->
-          <RouterLink to="/messages" class="hover:text-purple-700">
+          <RouterLink to="/chat" class="hover:text-purple-700">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
