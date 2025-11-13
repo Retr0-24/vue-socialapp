@@ -7,10 +7,13 @@ import { ref } from "vue";
 import Trends from "@/components/Trends.vue";
 import PeopleYouKnow from "@/components/PeopleYouKnow.vue";
 import FeedItem from "@/components/FeedItem.vue"
+import { useToastStore } from "@/stores/toast";
 
 const query = ref("");
 const users = ref([]);
 const posts = ref([]);
+const toastStore = useToastStore();
+
 
 const submitForm = async () => {
   try {
@@ -34,7 +37,7 @@ const submitForm = async () => {
     <div class="main-left col-span-3 space-y-4">
         <div class="bg-white border border-gray-200 rounded-lg">
             <form v-on:submit.prevent="submitForm" class="p-4 flex space-x-4">
-                <input v-model="query" type="search" class="p-4 w-full bg-gray-100 rounded-lg" placeholder="What are you thinking?"></input>
+                <input v-model="query" type="search" class="p-4 w-full bg-gray-100 rounded-lg" placeholder="Who are you looking for?"></input>
                   <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">
                     <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +73,7 @@ const submitForm = async () => {
                   </strong>
                 </p>
                 <div class="mt-6 flex space-x-8 justify-around">
-                    <p class="text-xs text-gray-500">182 friend</p>
+                    <p class="text-xs text-gray-500">{{ user.friends_count }} friends</p>
                     <p class="text-xs text-gray-500">120 posts</p>
                 </div>
             </div>

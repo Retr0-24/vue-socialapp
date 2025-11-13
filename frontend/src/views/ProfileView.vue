@@ -8,13 +8,15 @@ import { useRoute } from "vue-router";
 import PeopleYouKnow from "@/components/PeopleYouKnow.vue";
 import Trends from "@/components/Trends.vue";
 import { useUserStore } from "@/stores/user";
+import { useToastStore } from "@/stores/toast";
 import FeedItem from "@/components/FeedItem.vue";
 
 const posts = ref([]);
 const user = ref(null);
 const body = ref("");
-const userStore = useUserStore();
 const route = useRoute();
+const userStore = useUserStore();
+const toastStore = useToastStore();
 
 const getFeed = async () => {
   try {
@@ -58,6 +60,28 @@ const sendFriendshipRequest = async () => {
       `/api/friends/send-request/${route.params.id}/`
     );
     console.log("data", data);
+
+    const message = data?.message ?? "Friend request updated";
+    const isAlreadySent = message.toLowerCase().includes("already");
+    const bgClass = isAlreadySent ? "bg-yellow-300" : "bg-emerald-300";
+
+    toastStore.showToast(5000, message, bgClass);
+  } catch (error) {
+    console.log("error", error);
+
+    const message =
+      error.response?.data?.message ?? "Unable to send friend request";
+
+    toastStore.showToast(5000, message, "bg-red-300");
+  }
+};
+
+const logout = async () => {
+  try {
+    console.log("Log out");
+
+    userStore.removeToken();
+    $router.push("/login");
   } catch (error) {
     console.log("error", error);
   }
@@ -79,24 +103,29 @@ const sendFriendshipRequest = async () => {
         </p>
 
         <!-- User stats: friends and posts count -->
-        <div
-          v-if="user"
-          class="mt-6 flex space-x-8 justify-around"
-        >
+        <div v-if="user" class="mt-6 flex space-x-8 justify-around">
           <RouterLink
             :to="{ name: 'friends', params: { id: user.id } }"
             class="text-xs text-gray-500"
-            >182 friends</RouterLink
+            >{{ user.friends_count }} friends</RouterLink
           >
           <p class="text-xs text-gray-500">120 posts</p>
         </div>
 
         <div class="mt-6">
           <button
+            v-if="userStore.id && user && userStore.id !== user.id"
             class="inline-block py-1 px-3 bg-purple-600 text-xs text-white rounded-lg"
             @click="sendFriendshipRequest"
           >
             Send Friend Request
+          </button>
+          <button
+            v-if="userStore.id && user && userStore.id === user.id"
+            class="inline-block py-1 px-3 bg-red-600 text-xs text-white rounded-lg"
+            @click="logout"
+          >
+            Log out
           </button>
         </div>
       </div>
