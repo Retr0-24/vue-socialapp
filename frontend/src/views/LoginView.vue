@@ -1,26 +1,24 @@
 <script setup>
 // Import Dependencies
-import { reactive, ref } from 'vue' // Vue's reactivity functions.
-import { useRouter } from 'vue-router' // Vue Router's hook for navigation.
-import axios from 'axios' // HTTP client for API requests.
+import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
+import axios from "axios";
 
 // Import Components
-import { useToastStore } from '@/stores/toast' // Pinia store for toast notifications.
-import { useUserStore } from '@/stores/user' // Pinia store for user state management.
+import { useToastStore } from "@/stores/toast";
+import { useUserStore } from "@/stores/user";
 
-// Initialize router and stores.
-const router = useRouter()
-const toastStore = useToastStore()
-const userStore = useUserStore()
+const router = useRouter();
+const toastStore = useToastStore();
+const userStore = useUserStore();
 
 // Reactive form object to hold user's login credentials.
 const form = reactive({
-  email: '',
-  password: ''
-})
+  email: "",
+  password: "",
+});
 
-// A ref to hold any validation or API errors.
-const errors = ref([])
+const errors = ref([]);
 
 /**
  * Handles the form submission for user login.
@@ -28,43 +26,43 @@ const errors = ref([])
  */
 const submitForm = async () => {
   // Clear previous errors.
-  errors.value = []
+  errors.value = [];
 
   // Basic frontend validation.
-  if (form.email === '') {
-    errors.value.push('Email is required.')
+  if (form.email === "") {
+    errors.value.push("Email is required.");
   }
-  if (form.password === '') {
-    errors.value.push('Password is required.')
+  if (form.password === "") {
+    errors.value.push("Password is required.");
   }
 
   // If there are no validation errors, proceed with the API call.
   if (errors.value.length === 0) {
     try {
       // Send a POST request to the login endpoint.
-      const response = await axios.post('/api/login/', form)
+      const response = await axios.post("/api/login/", form);
 
       // If login is successful, store the token in the user store.
-      userStore.setToken(response.data)
+      userStore.setToken(response.data);
 
       // Fetch the user's information.
-      const { data: user } = await axios.get('/api/me/')
+      const { data: user } = await axios.get("/api/me/");
       // Store the user's information in the user store.
-      userStore.setUserInfo(user)
+      userStore.setUserInfo(user);
 
       // Show a success toast notification.
-      toastStore.showToast(3000, 'Logged in successfully.', 'bg-emerald-500')
+      toastStore.showToast(3000, "Logged in successfully.", "bg-emerald-500");
 
       // Redirect the user to the feed page.
-      await router.push('/feed')
+      await router.push("/feed");
     } catch (error) {
       // If there's an error during login, log it and show an error message.
-      console.log('login error', error)
-      errors.value.push('Invalid e-mail or password.')
-      toastStore.showToast(3000, 'Invalid e-mail or password.', 'bg-red-300')
+      console.log("login error", error);
+      errors.value.push("Invalid e-mail or password.");
+      toastStore.showToast(3000, "Invalid e-mail or password.", "bg-red-300");
     }
   }
-}
+};
 </script>
 
 <template>
@@ -78,7 +76,8 @@ const submitForm = async () => {
         </p>
         <p class="font-bold">
           Don't have an account?
-          <RouterLink to="/signup" class="underline">Click here</RouterLink> to create one!
+          <RouterLink to="/signup" class="underline">Click here</RouterLink> to
+          create one!
         </p>
       </div>
     </div>
@@ -89,14 +88,24 @@ const submitForm = async () => {
         <form class="space-y-6" @submit.prevent="submitForm">
           <!-- Email input field -->
           <div>
-            <label>E-mail</label><br>
-            <input type="email" v-model="form.email" placeholder="Your E-Mail" class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">
+            <label>E-mail</label><br />
+            <input
+              type="email"
+              v-model="form.email"
+              placeholder="Your E-Mail"
+              class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg"
+            />
           </div>
 
           <!-- Password input field -->
           <div>
-            <label>Password</label><br>
-            <input type="password" v-model="form.password" placeholder="Your Password" class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">
+            <label>Password</label><br />
+            <input
+              type="password"
+              v-model="form.password"
+              placeholder="Your Password"
+              class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg"
+            />
           </div>
 
           <!-- Display error messages if any -->
@@ -108,7 +117,11 @@ const submitForm = async () => {
 
           <!-- Submit button -->
           <div>
-            <button class="py-4 px-6 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Log in</button>
+            <button
+              class="py-4 px-6 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            >
+              Log in
+            </button>
           </div>
         </form>
       </div>

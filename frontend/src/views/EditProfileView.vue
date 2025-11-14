@@ -102,8 +102,16 @@ const submitForm = async () => {
       <div class="p-12 bg-white border border-gray-200 rounded-lg">
         <h1 class="mb-6 text-2xl">Edit Profile</h1>
         <p class="mb-6 text-gray-500">
-          Create an account to start sharing and connecting with your friends.
+          Edit your Profile like you want! Insert and Avatar, change your name
+          or update your password and email. All in one place! :)
         </p>
+
+        <RouterLink
+          to="/profile/edit/password"
+          class="inline-block py-1 px-3 bg-purple-600 text-xs text-white rounded-lg"
+        >
+          Change Password
+        </RouterLink>
       </div>
     </div>
 

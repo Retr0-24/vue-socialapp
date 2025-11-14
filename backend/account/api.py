@@ -40,7 +40,7 @@ def signup(request):
 
         # Send verrification email logic can be added here
     else:
-        message = 'Error'
+        message = form.errors.as_json()
 
     return JsonResponse({'message': message})
 
@@ -76,6 +76,8 @@ def edit_profile(request):
         if form.is_valid():
             form.save()
 
+            serializer = UserSerializer(user)
+            
             return JsonResponse({
                 'message': 'Profile updated',
                 'user': UserSerializer(user).data

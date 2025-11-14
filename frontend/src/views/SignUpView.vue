@@ -65,6 +65,10 @@ const submitForm = async () => {
         form.password_confirmation = "";
         return;
       }
+      const data = JSON.parse(response.data.message);
+      for (const key in data) {
+        errors.value.push(data[key][0].message);
+      }
 
       // If there was an error, show a generic error toast.
       toastStore.showToast(

@@ -50,6 +50,7 @@ const submitForm = async () => {
 
     posts.value.unshift(data);
     body.value = "";
+    user.posts_count += 1;
   } catch (error) {
     console.log("error", error);
   }
@@ -126,7 +127,9 @@ const logout = async () => {
             class="text-xs text-gray-500"
             >{{ user?.friends_count ?? 0 }} friends</RouterLink
           >
-          <p class="text-xs text-gray-500">{{ user?.posts_count ?? 0 }} posts</p>
+          <p class="text-xs text-gray-500">
+            {{ user?.posts_count ?? 0 }} posts
+          </p>
         </div>
 
         <div class="mt-6">
