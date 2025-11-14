@@ -101,10 +101,16 @@ Main User:
 <br>Email: crankywright1@justzeus.com
 <br>Password: testpassword
 
-Test User:
+Test User 1:
 <br>Id: 71d84f01-537b-430d-9711-b71df5028321
 <br>Username: testname
 <br>Email: test@gmail.com
+<br>Password: testpassword
+
+Test User 2:
+<br>Id: 0d5ffc60-b432-4d02-9680-12a8098cec10
+<br>Username: LoL
+<br>Email: lol@gmail.com
 <br>Password: testpassword
 
 Admin User (NOT CONFIGURED):

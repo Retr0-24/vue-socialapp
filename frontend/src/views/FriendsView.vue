@@ -50,7 +50,10 @@ const handleRequest = async (status, pk) => {
     <div class="main-left col-span-1">
       <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
         <!-- User avatar -->
-        <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full" />
+        <img
+          :src="user?.get_avatar ?? 'https://i.pravatar.cc/300?img=70'"
+          class="mb-6 rounded-full"
+        />
 
         <!-- User name -->
         <p>
@@ -60,7 +63,7 @@ const handleRequest = async (status, pk) => {
         <!-- User stats: friends and posts count -->
         <div class="mt-6 flex space-x-8 justify-around" v-if="user">
           <p class="text-xs text-gray-500">{{ user?.friends_count ?? 0 }} friends</p>
-          <p class="text-xs text-gray-500">120 posts</p>
+            <p class="text-xs text-gray-500">{{ user?.posts_count ?? 0 }} posts</p>
         </div>
       </div>
     </div>
@@ -78,7 +81,7 @@ const handleRequest = async (status, pk) => {
           v-bind:key="friendshipRequests.id"
         >
           <img
-            src="https://i.pravatar.cc/100?img=70"
+            :src="friendshipRequests.created_by.get_avatar"
             class="mb-6 rounded-full"
           />
           <p>
@@ -92,7 +95,7 @@ const handleRequest = async (status, pk) => {
             <p class="text-xs text-gray-500">
               {{ friendshipRequests.created_by?.friends_count ?? 0 }} friends
             </p>
-            <p class="text-xs text-gray-500">120 posts</p>
+            <p class="text-xs text-gray-500">{{ user?.posts_count ?? 0 }} posts</p>
           </div>
           <div class="mt-6 space-x-4">
               <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg" @click="handleRequest('accepted', friendshipRequests.created_by.id)">Accept</button>
@@ -114,7 +117,7 @@ const handleRequest = async (status, pk) => {
           v-bind:key="friend.id"
         >
           <img
-            src="https://i.pravatar.cc/300?img=70"
+            :src="friend?.get_avatar ?? 'https://i.pravatar.cc/300?img=70'"
             class="mb-6 rounded-full"
           />
           <p>

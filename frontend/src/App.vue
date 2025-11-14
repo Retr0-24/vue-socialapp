@@ -1,21 +1,17 @@
 <script setup>
-// This script setup block handles the component's logic.
-
 // Import Dependencies
-import { onBeforeMount } from "vue"; // Vue's lifecycle hook that runs before the component is mounted.
-import { RouterView, RouterLink } from "vue-router"; // Used to display the component for the current route.
-import axios from "axios"; // HTTP client for making API requests.
-import { storeToRefs } from "pinia"; // Utility to create refs from store properties.
+import { onBeforeMount } from "vue";
+import { RouterView, RouterLink } from "vue-router";
+import axios from "axios";
+import { storeToRefs } from "pinia";
 
 // Import Components
-import ToastMessage from "./components/ToastMessage.vue"; // Component to display toast notifications.
-import { useUserStore } from "./stores/user"; // Pinia store for user state management.
+import ToastMessage from "./components/ToastMessage.vue";
+import { useUserStore } from "./stores/user";
 
-// Initialize the user store.
 const userStore = useUserStore();
 
-// Destructure reactive properties from the user store.
-const { isAuthenticated } = storeToRefs(userStore);
+const { isAuthenticated, id: userId, avatar } = storeToRefs(userStore);
 
 // `onBeforeMount` lifecycle hook to initialize the user store and set up Axios headers.
 onBeforeMount(() => {
@@ -124,9 +120,12 @@ onBeforeMount(() => {
         <!-- Right menu with user-specific actions -->
         <div class="menu-right">
           <!-- Display user avatar if authenticated -->
-          <template v-if="isAuthenticated">
-            <RouterLink :to="{ name: 'profile', params: { id: userStore.id } }">
-              <img src="https://i.pravatar.cc/40?img=70" class="rounded-full" />
+          <template v-if="isAuthenticated && userId">
+            <RouterLink :to="{ name: 'profile', params: { id: userId } }">
+              <img
+                :src="avatar || 'https://i.pravatar.cc/40?img=70'"
+                class="w-12 h-12 object-cover rounded-full"
+              />
             </RouterLink>
           </template>
           <!-- Display Login and Signup links if not authenticated -->
@@ -156,7 +155,4 @@ onBeforeMount(() => {
   <ToastMessage />
 </template>
 
-<style scoped>
-/* Scoped styles for this component. */
-/* These styles will only apply to the elements in this component and not affect other components. */
-</style>
+<style scoped></style>

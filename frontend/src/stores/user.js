@@ -15,6 +15,7 @@ export const useUserStore = defineStore("user", {
     email: null, // User's email address.
     access: null, // JWT access token.
     refresh: null, // JWT refresh token.
+    avatar: null, // User's avatar URL.
   }),
 
   // Actions are methods that can be called to modify the state.
@@ -31,6 +32,7 @@ export const useUserStore = defineStore("user", {
         this.id = localStorage.getItem("user.id");
         this.name = localStorage.getItem("user.name");
         this.email = localStorage.getItem("user.email");
+        this.avatar = localStorage.getItem("user.avatar");
         this.isAuthenticated = true;
 
         // Set the Authorization header for all subsequent Axios requests.
@@ -82,6 +84,7 @@ export const useUserStore = defineStore("user", {
       this.id = null;
       this.name = null;
       this.email = null;
+      this.avatar = null;
 
       // Remove the Authorization header from Axios.
       delete axios.defaults.headers.common["Authorization"];
@@ -92,6 +95,7 @@ export const useUserStore = defineStore("user", {
       localStorage.removeItem("user.id");
       localStorage.removeItem("user.name");
       localStorage.removeItem("user.email");
+      localStorage.removeItem("user.avatar");
     },
 
     /**
@@ -105,10 +109,14 @@ export const useUserStore = defineStore("user", {
       this.name = user.name;
       this.email = user.email;
 
+      const avatarUrl = user.avatar ?? user.get_avatar ?? this.avatar ?? "";
+      this.avatar = avatarUrl || null;
+
       // Store user information in local storage.
       localStorage.setItem("user.id", this.id ?? "");
       localStorage.setItem("user.name", this.name ?? "");
       localStorage.setItem("user.email", this.email ?? "");
+      localStorage.setItem("user.avatar", this.avatar ?? "");
 
       console.log("User", {
         id: this.id,

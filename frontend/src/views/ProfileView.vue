@@ -2,7 +2,7 @@
 // Import Dependencies
 import axios from "axios";
 import { onMounted, ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 // Import components.
 import PeopleYouKnow from "@/components/PeopleYouKnow.vue";
@@ -15,6 +15,7 @@ const posts = ref([]);
 const user = ref(null);
 const body = ref("");
 const route = useRoute();
+const router = useRouter();
 const userStore = useUserStore();
 const toastStore = useToastStore();
 
@@ -76,12 +77,25 @@ const sendFriendshipRequest = async () => {
   }
 };
 
+const sendDirectMessage = async () => {
+  try {
+    console.log("sendDirectMessage");
+    const { data } = await axios.get(
+      `/api/chat/${route.params.id}/get-or-create/`
+    );
+    console.log("data", data);
+    router.push("/chat");
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
 const logout = async () => {
   try {
     console.log("Log out");
 
     userStore.removeToken();
-    $router.push("/login");
+    router.push("/login");
   } catch (error) {
     console.log("error", error);
   }
@@ -95,7 +109,10 @@ const logout = async () => {
     <div class="main-left col-span-1">
       <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
         <!-- User avatar -->
-        <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full" />
+        <img
+          :src="user?.get_avatar ?? 'https://i.pravatar.cc/300?img=70'"
+          class="mb-6 rounded-full"
+        />
 
         <!-- User name -->
         <p>
@@ -107,9 +124,9 @@ const logout = async () => {
           <RouterLink
             :to="{ name: 'friends', params: { id: user.id } }"
             class="text-xs text-gray-500"
-            >{{ user.friends_count }} friends</RouterLink
+            >{{ user?.friends_count ?? 0 }} friends</RouterLink
           >
-          <p class="text-xs text-gray-500">120 posts</p>
+          <p class="text-xs text-gray-500">{{ user?.posts_count ?? 0 }} posts</p>
         </div>
 
         <div class="mt-6">
@@ -120,6 +137,23 @@ const logout = async () => {
           >
             Send Friend Request
           </button>
+
+          <button
+            v-if="userStore.id && user && userStore.id !== user.id"
+            class="inline-block py-1 px-3 bg-purple-600 text-xs text-white rounded-lg"
+            @click="sendDirectMessage"
+          >
+            Send direct Message
+          </button>
+
+          <RouterLink
+            to="/profile/edit"
+            v-if="userStore.id && user && userStore.id === user.id"
+            class="inline-block py-1 px-1 bg-gray-600 text-xs text-white rounded-lg mr-10"
+          >
+            Edit Profile
+          </RouterLink>
+
           <button
             v-if="userStore.id && user && userStore.id === user.id"
             class="inline-block py-1 px-3 bg-red-600 text-xs text-white rounded-lg"

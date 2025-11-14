@@ -5,11 +5,11 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
 # Import Components
-from .models import Post, Like, Comment
+from .models import Post, Like, Comment, Trend
 from .forms import PostForm
 from account.models import User
 from account.serializers import UserSerializer
-from .serializers import PostSerializer, PostDetailSerializer, CommentSerializer
+from .serializers import PostSerializer, PostDetailSerializer, CommentSerializer, TrendSerializer
 
 
 # Create your views here.
@@ -21,6 +21,11 @@ def post_list(request):
         user_ids.append(user.id)
 
     posts = Post.objects.filter(created_by_id__in=list(user_ids))
+
+    trend = request.GET.get('trend', '')
+
+    if trend:
+        posts = posts.filter(body__icontains='#' + trend)
 
     serializer = PostSerializer(posts, many=True)
 
@@ -94,4 +99,10 @@ def post_create_comment(request, pk):
 
     serializer = CommentSerializer(comment)
 
-    return Response(serializer.data, safe=False ,status=status.HTTP_201_CREATED)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+@api_view(['GET'])
+def get_trends(request):
+     serializer = TrendSerializer(Trend.objects.all(), many=True)
+
+     return Response(serializer.data)

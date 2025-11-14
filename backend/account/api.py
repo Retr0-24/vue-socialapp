@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 
 # Import Components
-from .forms import signUpForm
+from .forms import signUpForm, ProfileForm
 from .models import FriendshipRequest
 from .models import User
 from .serializers import UserSerializer, FriendshipRequestSerializer
@@ -17,7 +17,8 @@ def me(request):
     return JsonResponse({
         'id': request.user.id,
         'email': request.user.email,
-        'name': request.user.name
+        'name': request.user.name,
+        'avatar': request.user.get_avatar(),
     })
 
 @api_view(['POST'])
@@ -60,6 +61,27 @@ def friends(request, pk):
         'friends': UserSerializer(friends, many=True).data,
         'requests': requests
     }, safe=False)
+
+@api_view(['POST'])
+def edit_profile(request):
+    user = request.user
+    email = request.data.get('email')
+
+    if User.objects.exclude(id=user.id).filter(email=email).exists():
+        return JsonResponse({'message': 'Email is already in use.'}, status=400)
+
+    else:
+        form = ProfileForm(request.POST or None, request.FILES or None, instance=user)
+
+        if form.is_valid():
+            form.save()
+
+            return JsonResponse({
+                'message': 'Profile updated',
+                'user': UserSerializer(user).data
+            })
+
+        return JsonResponse({'message': 'Invalid data submitted.'}, status=400)
 
 @api_view(['POST'])
 def send_friendship_request(request, pk):

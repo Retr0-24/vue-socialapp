@@ -14,13 +14,17 @@ const props = defineProps({
 
 const { post } = toRefs(props);
 
-const likePost = async (pk, post) => {
+const likePost = async () => {
+  if (!post.value) {
+    return;
+  }
+
   try {
-    const { data } = await axios.post(`/api/posts/${pk}/like/`);
+    const { data } = await axios.post(`/api/posts/${post.value.id}/like/`);
     console.log("data", data);
 
-    if (data?.message == "Liked") {
-      post.likes_count += 1;
+    if (data?.message === "Liked") {
+      post.value.likes_count = (post.value.likes_count || 0) + 1;
     }
   } catch (error) {
     console.log("error", error);
@@ -31,10 +35,7 @@ const likePost = async (pk, post) => {
 <template>
   <div class="mb-6 flex items-center justify-between">
     <div class="flex items-center space-x-6">
-      <img
-        src="https://i.pravatar.cc/300?img=70"
-        class="w-[40px] rounded-full"
-      />
+      <img :src="post.created_by.get_avatar" class="w-[40px] rounded-full" />
       <p>
         <strong>
           <RouterLink
@@ -56,7 +57,7 @@ const likePost = async (pk, post) => {
   <!-- Post actions: likes and comments -->
   <div class="my-6 flex justify-between">
     <div class="flex space-x-6">
-      <div class="flex items-center space-x-2" @click="likePost(post.id)">
+      <div class="flex items-center space-x-2" @click="likePost">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

@@ -24,6 +24,11 @@ const routes = [
     component: () => import("../views/ProfileView.vue"),
   },
   {
+    path: "/profile/edit",
+    name: "editprofile",
+    component: () => import("../views/EditProfileView.vue"),
+  },
+  {
     path: "/feed",
     name: "feed",
     component: () => import("../views/FeedView.vue"),
@@ -42,6 +47,11 @@ const routes = [
     path: "/search",
     name: "search",
     component: () => import("../views/SearchView.vue"),
+  },
+  {
+    path: "/trends/:id",
+    name: "trendsview",
+    component: () => import("../views/TrendView.vue"),
   },
   {
     path: "/profile/:id/friends",

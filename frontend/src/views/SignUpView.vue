@@ -1,22 +1,21 @@
 <script setup>
 // Import Dependencies
-import axios from 'axios' // HTTP client for API requests.
-import { reactive, ref } from 'vue' // Vue's reactivity functions.
-import { useToastStore } from '@/stores/toast' // Pinia store for toast notifications.
+import axios from "axios";
+import { reactive, ref } from "vue";
+import { useToastStore } from "@/stores/toast";
 
-// Initialize the toast store.
-const toastStore = useToastStore()
+const toastStore = useToastStore();
 
 // Reactive form object to hold user's registration data.
 const form = reactive({
-  name: '',
-  email: '',
-  password: '',
-  password_confirmation: ''
-})
+  name: "",
+  email: "",
+  password: "",
+  password_confirmation: "",
+});
 
 // A ref to hold any validation or API errors.
-const errors = ref([])
+const errors = ref([]);
 
 /**
  * Handles the form submission for user registration.
@@ -24,47 +23,66 @@ const errors = ref([])
  */
 const submitForm = async () => {
   // Clear previous errors.
-  errors.value = []
+  errors.value = [];
 
   // Basic frontend validation.
-  if (form.name === '') {
-    errors.value.push('Name is required.')
+  if (form.name === "") {
+    errors.value.push("Name is required.");
   }
-  if (form.email === '') {
-    errors.value.push('Email is required.')
+  if (form.email === "") {
+    errors.value.push("Email is required.");
   }
-  if (form.password === '') {
-    errors.value.push('Password is required.')
+  if (form.password === "") {
+    errors.value.push("Password is required.");
   }
   if (form.password !== form.password_confirmation) {
-    errors.value.push('Passwords do not match.')
+    errors.value.push("Passwords do not match.");
   }
 
   // If there are no validation errors, proceed with the API call.
   if (errors.value.length === 0) {
     try {
       // Send a POST request to the signup endpoint.
-      const response = await axios.post('/api/signup/', form)
+      const response = await axios.post("/api/signup/", {
+        name: form.name,
+        email: form.email,
+        password1: form.password,
+        password2: form.password_confirmation,
+      });
 
       // If registration is successful, show a success toast and clear the form.
-      if (response.data.message === 'success') {
-        toastStore.showToast(5000, 'The user is registered successfully. Please log in.', 'bg-emerald-500')
+      if (response.data.message === "success") {
+        toastStore.showToast(
+          5000,
+          "The user is registered successfully. Please log in.",
+          "bg-emerald-500"
+        );
 
         // Clear the form fields.
-        form.name = ''
-        form.email = ''
-        form.password = ''
-        form.password_confirmation = ''
-      } else {
-        // If there was an error, show a generic error toast.
-        toastStore.showToast(5000, 'There was an error during registration. Please try again later.', 'bg-red-300')
+        form.name = "";
+        form.email = "";
+        form.password = "";
+        form.password_confirmation = "";
+        return;
       }
+
+      // If there was an error, show a generic error toast.
+      toastStore.showToast(
+        5000,
+        "There was an error during registration. Please try again later.",
+        "bg-red-300"
+      );
     } catch (error) {
       // Log any errors to the console.
-      console.log('error', error)
+      console.log("error", error);
+
+      const message =
+        error.response?.data?.message ?? "Unable to register user right now.";
+
+      toastStore.showToast(5000, message, "bg-red-300");
     }
   }
-}
+};
 </script>
 
 <template>
@@ -78,7 +96,8 @@ const submitForm = async () => {
         </p>
         <p class="font-bold">
           Already have an account?
-          <RouterLink to="/login" class="underline">Click here</RouterLink> to Log in!
+          <RouterLink to="/login" class="underline">Click here</RouterLink> to
+          Log in!
         </p>
       </div>
     </div>
@@ -89,26 +108,46 @@ const submitForm = async () => {
         <form class="space-y-6" @submit.prevent="submitForm">
           <!-- Name input field -->
           <div>
-            <label>Name</label><br>
-            <input type="text" v-model="form.name" placeholder="Your Full Name" class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">
+            <label>Name</label><br />
+            <input
+              type="text"
+              v-model="form.name"
+              placeholder="Your Full Name"
+              class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg"
+            />
           </div>
 
           <!-- Email input field -->
           <div>
-            <label>E-mail</label><br>
-            <input type="email" v-model="form.email" placeholder="Your E-Mail" class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">
+            <label>E-mail</label><br />
+            <input
+              type="email"
+              v-model="form.email"
+              placeholder="Your E-Mail"
+              class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg"
+            />
           </div>
 
           <!-- Password input field -->
           <div>
-            <label>Password</label><br>
-            <input type="password" v-model="form.password" placeholder="Your Password" class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">
+            <label>Password</label><br />
+            <input
+              type="password"
+              v-model="form.password"
+              placeholder="Your Password"
+              class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg"
+            />
           </div>
 
           <!-- Confirm Password input field -->
           <div>
-            <label>Confirm Password</label><br>
-            <input type="password" v-model="form.password_confirmation" placeholder="Confirm Password" class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">
+            <label>Confirm Password</label><br />
+            <input
+              type="password"
+              v-model="form.password_confirmation"
+              placeholder="Confirm Password"
+              class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg"
+            />
           </div>
 
           <!-- Display error messages if any -->
@@ -120,7 +159,11 @@ const submitForm = async () => {
 
           <!-- Submit button -->
           <div>
-            <button class="py-4 px-6 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Sign Up</button>
+            <button
+              class="py-4 px-6 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            >
+              Sign Up
+            </button>
           </div>
         </form>
       </div>
