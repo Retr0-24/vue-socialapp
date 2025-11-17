@@ -20,6 +20,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 # Tell Django this is the default User Model 
 AUTH_USER_MODEL = 'account.User'
 

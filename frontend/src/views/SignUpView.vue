@@ -54,7 +54,7 @@ const submitForm = async () => {
       if (response.data.message === "success") {
         toastStore.showToast(
           5000,
-          "The user is registered successfully. Please log in.",
+          "The user is registered successfully. Please activate your Account.",
           "bg-emerald-500"
         );
 

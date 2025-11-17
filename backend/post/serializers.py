@@ -3,17 +3,20 @@ from rest_framework import serializers
 
 # Import Components
 from account.serializers import UserSerializer
-from post.models import Post, Comment, Trend
+from post.models import Post, PostAttachment, Comment, Trend
 
+class PostAttachmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostAttachment
+        fields = ['id', 'get_image',]
 
-
-# Create your views here.
 class PostSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
+    attachments = PostAttachmentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Post
-        fields = ('id', 'body', 'likes_count', 'comments_count', 'created_at_formatted', 'created_by')
+        fields = ('id', 'body', 'likes_count', 'comments_count', 'created_at_formatted', 'created_by', 'attachments')
 
 class CommentSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
@@ -26,10 +29,11 @@ class CommentSerializer(serializers.ModelSerializer):
 class PostDetailSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
     comments = CommentSerializer(many=True, read_only=True)
+    attachments = PostAttachmentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Post
-        fields = ('id', 'body', 'likes_count', 'comments_count', 'created_at_formatted', 'created_by', 'comments')
+        fields = ('id', 'body', 'likes_count', 'comments_count', 'created_at_formatted', 'created_by', 'comments', 'attachments')
 
 class TrendSerializer(serializers.ModelSerializer):
     class Meta:

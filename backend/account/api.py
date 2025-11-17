@@ -2,6 +2,8 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from django.contrib.auth.forms import PasswordChangeForm
+from django.core.mail import send_mail
 
 # Import Components
 from .forms import signUpForm, ProfileForm
@@ -36,9 +38,19 @@ def signup(request):
     })
 
     if form.is_valid():
-        form.save()
+        user = form.save()
+        user.is_active = False
+        user.save()
 
-        # Send verrification email logic can be added here
+        url = f'http://127.0.0.1:8000/activateemail/?email={user.email}&id={user.id}'
+
+        send_mail(
+            "Please Verify Email",
+            f"Your Account is not activated please click this Link you Verirfy your Account: {url}",
+            "noreply@socialapp.com",
+            [user.email],
+            fail_silently=False,
+        )
     else:
         message = form.errors.as_json()
 
@@ -84,6 +96,21 @@ def edit_profile(request):
             })
 
         return JsonResponse({'message': 'Invalid data submitted.'}, status=400)
+
+
+@api_view (['POST'])
+def editpassword(request):
+    user = request.user
+    
+    form = PasswordChangeForm(data=request.POST, user=user)
+
+    if form.is_valid():
+        form.save()
+
+        return JsonResponse({'message': 'Success'})  
+    else:
+        return JsonResponse({'message': form.errors.as_json()})
+
 
 @api_view(['POST'])
 def send_friendship_request(request, pk):

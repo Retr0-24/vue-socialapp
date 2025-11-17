@@ -5,6 +5,7 @@ from django.urls import path
 #Import Components
 from account import api
 
+
 # Configure JWT URL Patterns
 urlpatterns = [
     path('me/', api.me, name='me'),
@@ -17,4 +18,5 @@ urlpatterns = [
     path('friends/send-request/<uuid:pk>/', api.send_friendship_request, name='send_friendship_request'),
     path('friends/<uuid:pk>/<str:status>/', api.handle_request, name='handle_request'),
     path('editprofile/', api.edit_profile, name='edit_profile'),
+    path('editpassword/', api.editpassword, name='edit_password'),
 ]

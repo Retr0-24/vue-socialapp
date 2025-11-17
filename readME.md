@@ -95,11 +95,11 @@ Run Server
 
 # Notes
 
-Main User:
+Main Dev User:
 <br>Id: deeda893-1cf5-4065-b012-a08d552f061b
 <br>Username: Retr0
 <br>Email: crankywright1@justzeus.com
-<br>Password: testpassword
+<br>Password: testingpassword
 
 Test User 1:
 <br>Id: 71d84f01-537b-430d-9711-b71df5028321
@@ -113,7 +113,7 @@ Test User 2:
 <br>Email: lol@gmail.com
 <br>Password: testpassword
 
-Admin User (NOT CONFIGURED):
-<br>Username:
-<br>Email:
-<br>Password:
+First Real User:
+<br>Username: John Smith
+<br>Email: john.smith@gmail.com
+<br>Password: testingpassword

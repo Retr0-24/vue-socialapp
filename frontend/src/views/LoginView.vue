@@ -58,8 +58,14 @@ const submitForm = async () => {
     } catch (error) {
       // If there's an error during login, log it and show an error message.
       console.log("login error", error);
-      errors.value.push("Invalid e-mail or password.");
-      toastStore.showToast(3000, "Invalid e-mail or password.", "bg-red-300");
+      errors.value.push(
+        "Invalid e-mail or password. Or the User is no Activated."
+      );
+      toastStore.showToast(
+        3000,
+        "Invalid e-mail or password. Or the User is no Activated.",
+        "bg-red-300"
+      );
     }
   }
 };

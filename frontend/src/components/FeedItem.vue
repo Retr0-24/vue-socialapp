@@ -49,6 +49,14 @@ const likePost = async () => {
     <p class="text-gray-600">{{ post.created_at_formatted }}</p>
   </div>
 
+  <template v-if="post.attachments.length">
+    <img
+      v-for="image in post.attachments"
+      v-bind:key="image.id"
+      :src="image.get_image"
+      class="rounded-xl mb-3 w-full"
+    />
+  </template>
   <!-- Post content with text -->
   <p>
     {{ post.body }}
@@ -81,7 +89,7 @@ const likePost = async () => {
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-6 h-6"
+          class="w-6 h-6 hover:text-purple-600"
         >
           <path
             stroke-linecap="round"
@@ -91,7 +99,7 @@ const likePost = async () => {
         </svg>
         <RouterLink
           :to="{ name: 'postview', params: { id: post.id } }"
-          class="text-gray-500 text-xs"
+          class="text-gray-500 text-xs hover:text-purple-600"
           >{{ post.comments_count }} comments</RouterLink
         >
       </div>

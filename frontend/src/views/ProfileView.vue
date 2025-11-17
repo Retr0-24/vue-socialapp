@@ -18,6 +18,8 @@ const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 const toastStore = useToastStore();
+const fileInput = ref(null);
+const url = ref(null);
 
 const getFeed = async () => {
   try {
@@ -41,16 +43,30 @@ watch(
 
 const submitForm = async () => {
   console.log("submitForm", body.value);
+  const formData = new FormData();
+  formData.append("body", body.value);
+
+  const file = fileInput.value?.files?.[0];
+  if (file) {
+    formData.append("image", file);
+  }
 
   try {
-    const { data } = await axios.post("/api/posts/create/", {
-      body: body.value,
+    const { data } = await axios.post("/api/posts/create/", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
     });
     console.log("data", data);
 
     posts.value.unshift(data);
     body.value = "";
-    user.posts_count += 1;
+    url.value = null;
+    if (fileInput.value) {
+      fileInput.value.value = "";
+    }
+
+    if (user.value) {
+      user.value.posts_count = (user.value.posts_count || 0) + 1;
+    }
   } catch (error) {
     console.log("error", error);
   }
@@ -100,6 +116,11 @@ const logout = async () => {
   } catch (error) {
     console.log("error", error);
   }
+};
+
+const onFileChange = async (e) => {
+  const file = e.target.files?.[0];
+  url.value = file ? URL.createObjectURL(file) : null;
 };
 </script>
 
@@ -159,7 +180,7 @@ const logout = async () => {
 
           <button
             v-if="userStore.id && user && userStore.id === user.id"
-            class="inline-block py-1 px-3 bg-red-600 text-xs text-white rounded-lg"
+            class="inline-block py-1 px-3 bg-red-600 text-xs text-white rounded-lg cursor-pointer"
             @click="logout"
           >
             Log out
@@ -177,22 +198,27 @@ const logout = async () => {
       >
         <form v-on:submit.prevent="submitForm" method="post">
           <div class="p-4">
+            <div id="preview" v-if="url">
+              <img :src="url" class="w-full mb-5 rounded-lg" />
+            </div>
             <textarea
               v-model="body"
               class="p-4 w-full bg-gray-100 rounded-lg"
               placeholder="What do you want to post?"
             ></textarea>
           </div>
+
           <div class="p-4 border-t border-gray-100 flex justify-between">
-            <!-- Buttons for attaching an image and posting -->
-            <a
-              href="#"
-              class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg"
-              >Attach Image</a
+            <label
+              class="inline-block py-4 px-2 bg-gray-600 text-white rounded-lg text-center cursor-pointer hover:bg-purple-600"
             >
+              <input type="file" ref="fileInput" @change="onFileChange" />
+              Attach Image
+            </label>
+
             <button
               href="#"
-              class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
+              class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg cursor-pointer"
             >
               Post
             </button>
@@ -219,5 +245,7 @@ const logout = async () => {
 </template>
 
 <style scoped>
-/* Scoped styles for this component can be added here. */
+input[type="file"] {
+  display: none;
+}
 </style>

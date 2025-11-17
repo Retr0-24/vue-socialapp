@@ -64,6 +64,11 @@ const routes = [
     component: () => import("../views/PostView.vue"),
   },
   {
+    path: "/profile/edit/password",
+    name: "editpassword",
+    component: () => import("../views/EditPasswordView.vue"),
+  },
+  {
     // This is a catch-all route for any paths that don't match the defined routes.
     path: "/:pathMatch(.*)*",
     name: "not-found",
