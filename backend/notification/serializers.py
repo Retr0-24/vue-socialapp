@@ -1,0 +1,11 @@
+# Import Dependencies
+from rest_framework import serializers
+
+# Import Componenents
+from account.serializers import UserSerializer
+from .models import Notification
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ('id', 'body',)

@@ -10,6 +10,9 @@ from .forms import PostForm, AttachmentForm
 from account.models import User
 from account.serializers import UserSerializer
 from .serializers import PostSerializer, PostDetailSerializer, CommentSerializer, TrendSerializer
+from notification.utils import create_notification
+
+
 
 
 # Create your views here.
@@ -95,6 +98,8 @@ def post_like(request, pk):
         post.likes_count = post.likes_count + 1
         post.likes.add(like)
         post.save()
+
+        notification = create_notification(request, 'postlike', post_id=post.id)
 
         return Response({'message': 'Liked'})
     else:
