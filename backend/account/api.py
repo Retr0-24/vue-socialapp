@@ -10,6 +10,7 @@ from .forms import signUpForm, ProfileForm
 from .models import FriendshipRequest
 from .models import User
 from .serializers import UserSerializer, FriendshipRequestSerializer
+from notification.utils import create_notification
 
 
 # Create your views here.
@@ -73,6 +74,12 @@ def friends(request, pk):
         'friends': UserSerializer(friends, many=True).data,
         'requests': requests
     }, safe=False)
+
+@api_view(['GET'])
+def my_friendship_suggestions(request):
+    serializer = UserSerializer(request.user.people_you_may_know.all(), many=True)
+
+    return JsonResponse(serializer.data, safe=False)
 
 @api_view(['POST'])
 def edit_profile(request):
@@ -150,7 +157,9 @@ def send_friendship_request(request, pk):
     if existing_request:
         return JsonResponse({'message': 'Request already sent'}, status=200)
 
-    FriendshipRequest.objects.create(created_for=other_user, created_by=request.user)
+    friendrequest = FriendshipRequest.objects.create(created_for=other_user, created_by=request.user)
+
+    notification = create_notification(request, 'new_friendrequest', friendrequest_id=friendrequest.id)
 
     return JsonResponse({'message': 'Request sent'})
 
@@ -182,5 +191,7 @@ def handle_request(request, pk, status):
 
         other_user.friends_count = other_user.friends.count()
         other_user.save(update_fields=['friends_count'])
+
+        notification = create_notification(request, 'accepted_friendrequest', friendrequest_id=friendship_request.id)
 
     return JsonResponse({'message': 'Friendship updated'})

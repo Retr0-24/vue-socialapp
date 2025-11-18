@@ -20,6 +20,8 @@ const userStore = useUserStore();
 const toastStore = useToastStore();
 const fileInput = ref(null);
 const url = ref(null);
+const can_send_friendship_request = ref(null);
+const is_private = ref(false);
 
 const getFeed = async () => {
   try {
@@ -28,6 +30,7 @@ const getFeed = async () => {
 
     posts.value = data.posts || [];
     user.value = data.user || null;
+    can_send_friendship_request.value = data.can_send_friendship_request;
   } catch (error) {
     console.log("error", error);
   }
@@ -45,6 +48,7 @@ const submitForm = async () => {
   console.log("submitForm", body.value);
   const formData = new FormData();
   formData.append("body", body.value);
+  formData.append("is_private", is_private.value);
 
   const file = fileInput.value?.files?.[0];
   if (file) {
@@ -59,6 +63,7 @@ const submitForm = async () => {
 
     posts.value.unshift(data);
     body.value = "";
+    is_private.value = false;
     url.value = null;
     if (fileInput.value) {
       fileInput.value.value = "";
@@ -201,11 +206,16 @@ const onFileChange = async (e) => {
             <div id="preview" v-if="url">
               <img :src="url" class="w-full mb-5 rounded-lg" />
             </div>
+
             <textarea
               v-model="body"
               class="p-4 w-full bg-gray-100 rounded-lg"
               placeholder="What do you want to post?"
             ></textarea>
+
+            <label>
+              <input type="checkbox" class="m-1" v-model="is_private">Private</input>
+            </label>
           </div>
 
           <div class="p-4 border-t border-gray-100 flex justify-between">
