@@ -1,4 +1,6 @@
-# Frontend
+# Developing
+
+## Frontend
 
 Create VueJS Project
 <br>npm create vue@latest
@@ -23,7 +25,7 @@ Compile and hot-reload for Production
 Compile and minify for Production
 <br>npm run build
 
-# Backend
+## Backend
 
 Create local environment
 <br>python3 -m venv env
@@ -39,6 +41,9 @@ Install Dependencies
 <br>pip3 install djangorestframework-simplejwt
 <br>pip3 install pillow
 <br>pip3 install django-cors-headers
+
+Or Pip install all Dependencies from requirements.txt
+<br>pip3 install -r requirements.txt
 
 Create Django Project
 <br>django-admin startproject backend
@@ -93,7 +98,35 @@ Run Migrations
 Run Server
 <br>python3 manage.py runserver
 
+# Production
+
+## Backend
+
+Create .env file and insert VITE_API_URL
+<br>VITE_API_URL=http://api.sma.com
+
+Load settingsprod.py instead of settings.py
+
 # Notes
+
+## Packages NPM
+
+<br>tailwindcss @4.1.14
+<br>axios @1.12.2
+<br>pinia @3.0.3
+
+## Packages PIP
+
+<br>asgiref @3.10.0
+<br>Django @5.2.7
+<br>django-cors-headers @4.9.0
+<br>djangorestframework @3.16.1
+<br>djangorestframework_simplejwt @5.5.1
+<br>pillow @12.0.0
+<br>PyJWT @2.10.1
+<br>sqlparse @0.5.3
+
+## User
 
 Main Dev User:
 <br>Id: deeda893-1cf5-4065-b012-a08d552f061b
@@ -117,3 +150,8 @@ First Real User:
 <br>Username: John Smith
 <br>Email: john.smith@gmail.com
 <br>Password: testingpassword
+
+Dev Notes Temp:
+
+Create Architecture.md
+Comment Code

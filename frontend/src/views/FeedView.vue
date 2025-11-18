@@ -7,9 +7,11 @@ import PeopleYouKnow from "@/components/PeopleYouKnow.vue";
 import Trends from "@/components/Trends.vue";
 import { onMounted, ref } from "vue";
 import FeedItem from "@/components/FeedItem.vue";
+import FeedForm from "@/components/FeedForm.vue";
 
 const posts = ref([]);
 const body = ref("");
+const user = ref(null);
 
 const getFeed = async () => {
   try {
@@ -24,20 +26,12 @@ const getFeed = async () => {
 
 onMounted(getFeed);
 
-const submitForm = async () => {
-  console.log("submitForm", body.value);
+const handlePostCreated = (post) => {
+  posts.value.unshift(post);
+};
 
-  try {
-    const { data } = await axios.post("/api/posts/create/", {
-      body: body.value,
-    });
-    console.log("data", data);
-
-    posts.value.unshift(data);
-    body.value = "";
-  } catch (error) {
-    console.log("error", error);
-  }
+const handlePostDeleted = (postId) => {
+  posts.value = posts.value.filter((p) => p.id !== postId);
 };
 </script>
 
@@ -48,29 +42,11 @@ const submitForm = async () => {
     <div class="main-center col-span-3 space-y-4">
       <!-- Post creation form -->
       <div class="bg-white border border-gray-200 rounded-lg">
-        <form v-on:submit.prevent="submitForm" method="post">
-          <div class="p-4">
-            <textarea
-              v-model="body"
-              class="p-4 w-full bg-gray-100 rounded-lg"
-              placeholder="What do you want to post?"
-            ></textarea>
-          </div>
-          <div class="p-4 border-t border-gray-100 flex justify-between">
-            <!-- Buttons for attaching an image and posting -->
-            <a
-              href="#"
-              class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg"
-              >Attach Image</a
-            >
-            <button
-              href="#"
-              class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
-            >
-              Post
-            </button>
-          </div>
-        </form>
+        <FeedForm
+          v-bind:user="user"
+          v-bind:posts="posts"
+          @post-created="handlePostCreated"
+        />
       </div>
 
       <div
@@ -78,7 +54,7 @@ const submitForm = async () => {
         v-for="post in posts"
         v-bind:key="post.id"
       >
-        <FeedItem v-bind:post="post" />
+        <FeedItem v-bind:post="post" @delete-post="handlePostDeleted" />
       </div>
     </div>
     <!-- Right column: "People you may know" and "Trends" sections -->

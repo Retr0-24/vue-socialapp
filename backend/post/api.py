@@ -14,8 +14,6 @@ from .serializers import PostSerializer, PostDetailSerializer, CommentSerializer
 from notification.utils import create_notification
 
 
-
-
 # Create your views here.
 @api_view(['GET'])
 def post_list(request):
@@ -146,6 +144,13 @@ def post_create_comment(request, pk):
     serializer = CommentSerializer(comment)
 
     return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+@api_view(['DELETE'])
+def post_delete(request, pk):
+    post = Post.objects.filter(created_by=request.user).get(pk=pk)
+    post.delete()
+
+    return Response({'message': 'Post deleted'})
 
 @api_view(['GET'])
 def get_trends(request):

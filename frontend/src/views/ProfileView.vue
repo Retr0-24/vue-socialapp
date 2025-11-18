@@ -10,18 +10,15 @@ import Trends from "@/components/Trends.vue";
 import { useUserStore } from "@/stores/user";
 import { useToastStore } from "@/stores/toast";
 import FeedItem from "@/components/FeedItem.vue";
+import FeedForm from "@/components/FeedForm.vue";
 
 const posts = ref([]);
 const user = ref(null);
-const body = ref("");
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 const toastStore = useToastStore();
-const fileInput = ref(null);
-const url = ref(null);
 const can_send_friendship_request = ref(null);
-const is_private = ref(false);
 
 const getFeed = async () => {
   try {
@@ -44,36 +41,10 @@ watch(
   { immediate: true }
 );
 
-const submitForm = async () => {
-  console.log("submitForm", body.value);
-  const formData = new FormData();
-  formData.append("body", body.value);
-  formData.append("is_private", is_private.value);
-
-  const file = fileInput.value?.files?.[0];
-  if (file) {
-    formData.append("image", file);
-  }
-
-  try {
-    const { data } = await axios.post("/api/posts/create/", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-    console.log("data", data);
-
-    posts.value.unshift(data);
-    body.value = "";
-    is_private.value = false;
-    url.value = null;
-    if (fileInput.value) {
-      fileInput.value.value = "";
-    }
-
-    if (user.value) {
-      user.value.posts_count = (user.value.posts_count || 0) + 1;
-    }
-  } catch (error) {
-    console.log("error", error);
+const handlePostCreated = (post) => {
+  posts.value.unshift(post);
+  if (user.value) {
+    user.value.posts_count = (user.value.posts_count || 0) + 1;
   }
 };
 
@@ -123,9 +94,11 @@ const logout = async () => {
   }
 };
 
-const onFileChange = async (e) => {
-  const file = e.target.files?.[0];
-  url.value = file ? URL.createObjectURL(file) : null;
+const deletePost = (id) => {
+  posts.value = posts.value.filter((post) => post.id !== id);
+  if (user.value && userStore.id === user.value.id) {
+    user.value.posts_count = Math.max(0, (user.value.posts_count || 1) - 1);
+  }
 };
 </script>
 
@@ -201,39 +174,11 @@ const onFileChange = async (e) => {
         class="bg-white border border-gray-200 rounded-lg"
         v-if="userStore.id && user && userStore.id === user.id"
       >
-        <form v-on:submit.prevent="submitForm" method="post">
-          <div class="p-4">
-            <div id="preview" v-if="url">
-              <img :src="url" class="w-full mb-5 rounded-lg" />
-            </div>
-
-            <textarea
-              v-model="body"
-              class="p-4 w-full bg-gray-100 rounded-lg"
-              placeholder="What do you want to post?"
-            ></textarea>
-
-            <label>
-              <input type="checkbox" class="m-1" v-model="is_private">Private</input>
-            </label>
-          </div>
-
-          <div class="p-4 border-t border-gray-100 flex justify-between">
-            <label
-              class="inline-block py-4 px-2 bg-gray-600 text-white rounded-lg text-center cursor-pointer hover:bg-purple-600"
-            >
-              <input type="file" ref="fileInput" @change="onFileChange" />
-              Attach Image
-            </label>
-
-            <button
-              href="#"
-              class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg cursor-pointer"
-            >
-              Post
-            </button>
-          </div>
-        </form>
+        <FeedForm
+          v-bind:user="user"
+          v-bind:posts="posts"
+          @post-created="handlePostCreated"
+        />
       </div>
 
       <!-- Second post in the feed (static placeholder) -->
@@ -242,7 +187,7 @@ const onFileChange = async (e) => {
         v-for="post in posts"
         v-bind:key="post.id"
       >
-        <FeedItem v-bind:post="post" />
+        <FeedItem v-bind:post="post" @delete-post="deletePost" />
       </div>
     </div>
 
@@ -253,9 +198,3 @@ const onFileChange = async (e) => {
     </div>
   </div>
 </template>
-
-<style scoped>
-input[type="file"] {
-  display: none;
-}
-</style>

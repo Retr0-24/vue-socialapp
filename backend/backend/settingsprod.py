@@ -15,9 +15,9 @@ SECRET_KEY = 'django-insecure-ks1#pn9xit=@dh3ufr5k(%6dw24o$mqhm0_@5fa6d8_vndz_mp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['api.sma.com']
 
-WEBSITE_URL = 'http://127.0.0.1:8000'
+WEBSITE_URL = 'http://api.sma.com'
 
 # Application definition
 
@@ -42,13 +42,11 @@ REST_FRAMEWORK = {
     }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:5173",
-    "http://localhost:5173",
+    "http://sma.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:5173",
-    "http://localhost:5173",
+    "http://sma.com",
 ]
 
 INSTALLED_APPS = [
