@@ -1,7 +1,7 @@
 <script setup>
 // Import Dependencies
 import axios from "axios";
-import { reactive, ref, watch } from "vue";
+import { reactive, ref } from "vue";
 import { useToastStore } from "@/stores/toast";
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";

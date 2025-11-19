@@ -1,9 +1,12 @@
 <script setup>
 // Import Dependencies
-import { toRefs } from "vue";
+import { computed, ref, toRefs } from "vue";
 import { RouterLink } from "vue-router";
 import axios from "axios";
-import { ref } from "vue";
+
+// Import Components
+import { useUserStore } from "@/stores/user";
+import { useToastStore } from "@/stores/toast";
 
 // Accept a post to display.
 const props = defineProps({
@@ -15,7 +18,19 @@ const props = defineProps({
 
 const { post } = toRefs(props);
 const showExtraModal = ref(false);
+const userStore = useUserStore();
+const toastStore = useToastStore();
 const emit = defineEmits(["delete-post"]);
+const canManagePost = computed(() => {
+  const currentUserId = userStore.id;
+  const postOwnerId = post.value?.created_by?.id;
+
+  if (!currentUserId || !postOwnerId) {
+    return false;
+  }
+
+  return currentUserId === postOwnerId;
+});
 
 const likePost = async () => {
   if (!post.value) {
@@ -39,19 +54,37 @@ const toggleExtraModal = () => {
 };
 
 const deletePost = async () => {
-  console.log("deletePost:", post.value.id);
-
   try {
     const { data } = await axios.delete(`/api/posts/${post.value.id}/delete/`);
     console.log("data", data);
     emit("delete-post", post.value.id);
+
+    const message = data?.message ?? "This post has been deleted.";
+    toastStore.showToast(5000, message, "bg-emerald-500");
   } catch (error) {
     console.log("error", error);
+
+    const message =
+      error.response?.data?.message ?? "Unable to delete this post.";
+    toastStore.showToast(5000, message, "bg-red-300");
   }
 };
 
 const reportPost = async () => {
   console.log("reportPost:", post.value.id);
+  try {
+    const { data } = await axios.post(`/api/posts/${post.value.id}/report/`);
+    console.log("data", data);
+
+    const message = data?.message ?? "This post has been reported.";
+    toastStore.showToast(5000, message, "bg-emerald-500");
+  } catch (error) {
+    console.log("error", error);
+
+    const message =
+      error.response?.data?.message ?? "Unable to report this post.";
+    toastStore.showToast(5000, message, "bg-red-300");
+  }
 };
 </script>
 
@@ -171,6 +204,7 @@ const reportPost = async () => {
       <div
         class="flex items-center space-x-2 cursor-pointer"
         @click="deletePost"
+        v-if="canManagePost"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

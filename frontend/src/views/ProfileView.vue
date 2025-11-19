@@ -100,6 +100,14 @@ const deletePost = (id) => {
     user.value.posts_count = Math.max(0, (user.value.posts_count || 1) - 1);
   }
 };
+
+const reportPost = async (id) => {
+  try {
+  } catch (error) {
+    console.log("error", error);
+    toastStore.showToast(5000, "Unable to report post", "bg-red-300");
+  }
+};
 </script>
 
 <template>
